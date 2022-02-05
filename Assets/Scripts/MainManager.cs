@@ -12,16 +12,18 @@ public class MainManager : MonoBehaviour
 
     public Text ScoreText;
     public GameObject GameOverText;
+    public Text bestScoreText;
     
     private bool m_Started = false;
     private int m_Points;
     
     private bool m_GameOver = false;
-
+    BestScore dataScript = BestScore.Instance;
     
     // Start is called before the first frame update
     void Start()
     {
+        bestScoreText.text = $"High Score : {dataScript.bestPlayer} : {dataScript.highScore}";
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -72,5 +74,16 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+        if (m_Points > dataScript.highScore)
+        {
+            dataScript.highScore = m_Points;
+            dataScript.bestPlayer = dataScript.PlayerName;
+            bestScoreText.text = $"High Score : {dataScript.bestPlayer} : {dataScript.highScore}";
+            dataScript.SaveHighScore();
+            dataScript.SaveBestPlayer();
+            
+        }
+        
+
     }
 }
